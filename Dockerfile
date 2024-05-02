@@ -19,8 +19,7 @@ RUN apt-get install -y \
 # set workdir
 WORKDIR /work
 
-# copy all shell scripts and make it executable
-COPY build_*.sh ./
+# copy all get shell scripts and make it executable
 COPY get_*.sh ./
 RUN chmod +x *.sh 
 
@@ -29,6 +28,10 @@ RUN ./get_busybox.sh
 
 # download kernel
 RUN ./get_kernel.sh
+
+# copy all build shell scripts and make it executable
+COPY build_*.sh ./
+RUN chmod +x *.sh 
 
 # build busybox
 RUN ./build_busybox.sh
@@ -42,9 +45,6 @@ RUN mkdir -p /work/build_files
 # Build init ram file-system
 RUN ./build_rdfs.sh
 
-# save initramfs
-RUN cp /work/initramfs.cpio.gz /work/build_files
-
 # save bzImage
 RUN cp /work/linux_kernel/arch/x86_64/boot/bzImage /work/build_files
 
@@ -52,6 +52,6 @@ RUN cp /work/linux_kernel/arch/x86_64/boot/bzImage /work/build_files
 RUN cp /work/linux_kernel/vmlinux /work/build_files
 
 # Finally move all unused folders
-RUN mkdir .old && mv *.sh busybox *.gz linux_kernel initramfs .old
+RUN mkdir .old && mv *.sh busybox linux_kernel initramfs .old
 
 ENTRYPOINT ["/bin/bash"]

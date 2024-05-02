@@ -18,4 +18,4 @@ chmod +x init
 # create cpio file
 find . -print0 | cpio --null -ov --format=newc > initramfs.cpio 
 gzip /work/initramfs/initramfs.cpio
-mv /work/initramfs.cpio.gz /work/build_files/
+mv /work/initramfs/initramfs.cpio.gz /work/build_files/
