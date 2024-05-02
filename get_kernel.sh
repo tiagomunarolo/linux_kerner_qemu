@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 LINUX_VERSION=5.15.6
 

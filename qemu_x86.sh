@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 qemu-system-x86_64 \
     -kernel ./build_files/bzImage \
     -initrd  ./build_files/initramfs.cpio.gz  \

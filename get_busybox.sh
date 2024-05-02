@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 BUSYBOX_VERSION=1.34.1
 

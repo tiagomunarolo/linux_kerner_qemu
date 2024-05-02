@@ -20,7 +20,8 @@ RUN apt-get install -y \
 WORKDIR /work
 
 # copy all shell scripts and make it executable
-COPY *.sh ./
+COPY build_*.sh ./
+COPY get_*.sh ./
 RUN chmod +x *.sh 
 
 # download busybox
@@ -51,6 +52,6 @@ RUN cp /work/linux_kernel/arch/x86_64/boot/bzImage /work/build_files
 RUN cp /work/linux_kernel/vmlinux /work/build_files
 
 # Finally move all unused folders
-RUN mv *.sh busybox linux_kernel initramfs* /.old
+RUN mkdir .old && mv *.sh busybox *.gz linux_kernel initramfs .old
 
-ENTRYPOINT ["/bin/sh"]
+ENTRYPOINT ["/bin/bash"]
