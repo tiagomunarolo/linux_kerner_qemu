@@ -21,7 +21,6 @@ WORKDIR /work
 
 # copy all get shell scripts and make it executable
 COPY get_*.sh ./
-RUN chmod +x *.sh 
 
 # download busybox
 RUN ./get_busybox.sh
@@ -29,29 +28,29 @@ RUN ./get_busybox.sh
 # download kernel
 RUN ./get_kernel.sh
 
-# copy all build shell scripts and make it executable
-COPY build_*.sh ./
-RUN chmod +x *.sh 
-
-# build busybox
+# Copy scripts + build busybox
+COPY build_busybox.sh ./
 RUN ./build_busybox.sh
 
 # build kernel
+COPY build_kernel.sh ./
 RUN ./build_kernel.sh
 
 # build final directory data
 RUN mkdir -p /work/build_files
 
 # Build init ram file-system
+COPY init init
+COPY build_rdfs.sh ./
 RUN ./build_rdfs.sh
 
 # save bzImage
-RUN cp /work/linux_kernel/arch/x86_64/boot/bzImage /work/build_files
+RUN cp /work/linux_kernel/arch/x86/boot/bzImage /work/build_files
 
 # save vmlinux
 RUN cp /work/linux_kernel/vmlinux /work/build_files
 
-# Finally move all unused folders
-RUN mkdir .old && mv *.sh busybox linux_kernel initramfs .old
+# remove shell scripts
+RUN rm *.sh
 
 ENTRYPOINT ["/bin/bash"]

@@ -1,21 +1,14 @@
 #!/bin/bash
-cd /work
+
 # make dir structure
-mkdir -p initramfs/{bin,dev,etc,home,mnt,proc,sys,usr}
-cd /work/initramfs/dev
-sudo mknod sda b 8 0 
-sudo mknod console c 5 1
+mkdir initramfs && cd initramfs && mkdir -p bin dev etc lib mnt proc sbin sys tmp var
+
 # copy all from busybox
-cd /work/initramfs/
-cp -a /work/busybox/* .
+cp -a /work/busybox/_install/* /work/initramfs/
 # init file
-echo "#!/bin/sh" >> init
-echo "mount -t proc none /proc" >> init
-echo "mount -t sysfs none /sys" >> init
-echo "exec /bin/sh" >> init
-chmod +x init
-# init end
+mv /work/init /work/initramfs/init
+chmod +x /work/initramfs/init
 # create cpio file
-find . -print0 | cpio --null -ov --format=newc > initramfs.cpio 
-gzip /work/initramfs/initramfs.cpio
-mv /work/initramfs/initramfs.cpio.gz /work/build_files/
+# rm linuxrc
+rm /work/initramfs/linuxrc
+find . -print0 | cpio --null -ov --format=newc | gzip -9 > /work/build_files/initramfs.cpio.gz
